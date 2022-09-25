@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import "ag-grid-community/styles//ag-grid.css";
 import "ag-grid-community/styles//ag-theme-alpine.css";
-import { AgGridReact } from "ag-grid-react";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
 function Table() {
   const [tableData, setTableData] = useState([]);
@@ -11,12 +11,17 @@ function Table() {
   const [gridApi, setGridApi] = useState();
 
   const rowData = tableData;
+
   useEffect(() => {
     fetchUsersRecords();
   }, []);
+  const imageFormatter = ({ value }) => {
+    return <img src={value} width="50px" height="50px" />;
+  };
   const columnDefs = [
     {
       field: "id",
+      checkboxSelection: true,
     },
     {
       field: "firstName",
@@ -39,6 +44,11 @@ function Table() {
     {
       field: "phone",
     },
+    {
+      field: "image",
+      headerName: "Avatar",
+      cellRendererFramework: imageFormatter,
+    },
   ];
   const gridOptions = {
     columnDefs: columnDefs,
@@ -54,16 +64,21 @@ function Table() {
     console.log(tableData.data.users);
     setTableData(tableData.data.users);
   };
+
   const defaultColDef = {
     flex: 1,
     resizable: true,
     editable: true,
     sortable: true,
+
+    filter: true,
   };
+
   const onGridReady = (params) => {
+    //console.log(params);
     setGridApi(params);
     params.api.setColumnDefs([
-      { field: "id" },
+      { field: "id", checkboxSelection: true, headerCheckboxSelection: true },
       { field: "firstName" },
       { field: "maidenName" },
       { field: "lastName" },
@@ -81,6 +96,11 @@ function Table() {
         field: "phone",
         width: 100,
       },
+      {
+        field: "image",
+        headerName: "Avatar",
+        cellRendererFramework: imageFormatter,
+      },
     ]);
     console.log(rowData.push(tableData[0].id));
     console.log(rowData.push(tableData[1].firstName));
@@ -90,6 +110,7 @@ function Table() {
     console.log(rowData.push(tableData[5].gender));
     console.log(rowData.push(tableData[6].address.city));
     console.log(rowData.push(tableData[7].phone));
+    console.log(rowData.push(tableData[8].image));
   };
 
   return (
@@ -103,6 +124,8 @@ function Table() {
         // columnApi={tableData}
         onGridReady={onGridReady}
         gridOptions={columnDefs}
+        pagination={true}
+        paginationPageSize={10}
       ></AgGridReact>
     </div>
   );
