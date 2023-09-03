@@ -1,0 +1,12 @@
+#root{
+    background-color: blue;
+    color: beige;
+
+}
+#root1{
+    background-color: rgb(195, 114, 114);
+    color: rgb(9, 9, 8);
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+    font-style: normal;
+}
